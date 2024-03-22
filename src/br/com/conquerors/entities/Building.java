@@ -1,50 +1,30 @@
 package br.com.conquerors.entities;
 
 public abstract class Building {
-	private Double life;
-	private Double buildPrice;
-	private Double buildTime;
-	private Integer capacity;
-	private Integer level;
+	private int buildPrice;
+	private int level;
 	
 	public Building() {
 		this.level = 1; 
 	}
-	public Double getLife() {
-		return life;
-	}
-	public void setLife(Double life) {
-		this.life = life;
-	}
-	public Double getBuildPrice() {
+	public int getBuildPrice() {
 		return buildPrice;
 	}
-	public void setBuildPrice(Double buildPrice) {
+	public void setBuildPrice(int buildPrice) {
 		this.buildPrice = buildPrice;
 	}
-	public Double getBuildTime() {
-		return buildTime;
-	}
-	public void setBuildTime(Double buildTime) {
-		this.buildTime = buildTime;
-	}
-	public Integer getCapacity() {
-		return capacity;
-	}
-	public void setCapacity(Integer capacity) {
-		this.capacity = capacity;
-	}
-	public Integer getLevel() {
+	public int getLevel() {
 		return level;
 	}
-	public void setLevel(Integer level) {
+	public void setLevel(int level) {
 		this.level = level;
 	}
-	
-	public void increaseLevel() {
-		this.level++;
-		this.life += this.life * 0.1;
-		this.capacity += Integer.valueOf((int) (this.capacity * 0.15));
+	public boolean increaseLevel() {
+		if (this.level <= 5) {			
+			this.level++;
+			return true;
+		}
+		return false;
 	}
 	
 }

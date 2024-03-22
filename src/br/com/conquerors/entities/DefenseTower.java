@@ -1,17 +1,14 @@
 package br.com.conquerors.entities;
 
 public class DefenseTower extends Building{
-	/*
-	private Double life;
-	private Double buildPrice;
-	private Double buildTime;
-	private Integer capacity;
-	private Integer level;
-	*/
-	
 	private int archerNum;
 	private double atackDamage;
-
+	
+	public DefenseTower() {
+		this.archerNum = 10;
+		this.atackDamage = 50;
+		this.setBuildPrice(75);
+	}
 	
 	public int getArcherNum() {
 		return archerNum;
@@ -30,10 +27,12 @@ public class DefenseTower extends Building{
 	}
 
 	@Override
-	public void increaseLevel() {
-		super.increaseLevel();
-		this.atackDamage++;
-		this.archerNum++;
-		
+	public boolean increaseLevel() {
+		if (super.increaseLevel()) {
+			this.atackDamage += this.atackDamage * 0.05;
+			this.archerNum += 5;			
+			return true;
+		}
+		return false;
 	}
 }

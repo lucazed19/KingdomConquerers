@@ -1,20 +1,27 @@
 package br.com.conquerors.entities;
 
 public class LumberCamps extends Building {
-	
-	private Double woodPerMin;
+	private int woodPerTurn;
 
-	public Double getGoldPerMin() {
-		return woodPerMin;
+	public LumberCamps() {
+		this.woodPerTurn = 25;
+		this.setBuildPrice(150);
+	}
+	
+	public int getWoodPerTurn() {
+		return woodPerTurn;
 	}
 
-	public void setGoldPerMin(Double goldPerMin) {
-		this.woodPerMin = goldPerMin;
+	public void setWoodPerTurn(int woodPerTurn) {
+		this.woodPerTurn = woodPerTurn;
 	}
 	
 	@Override
-	public void increaseLevel() {
-		super.increaseLevel();
-		this.woodPerMin += this.woodPerMin * 0.05;
+	public boolean increaseLevel() {
+		if (super.increaseLevel()) {			
+			this.woodPerTurn += this.woodPerTurn * 0.05;
+			return true;
+		}
+		return false;
 }
 }

@@ -1,11 +1,10 @@
 package br.com.conquerors.entities;
 
-import br.com.conquerors.enuns.ResourcesType;
+import br.com.conquerors.enuns.ResourceType;
 
-public class Resources {
-	
+public class Resource {
 	private int quantity;
-	private ResourcesType type;
+	private ResourceType type;
 	
 	public int getQuantity() {
 		return quantity;
@@ -13,10 +12,10 @@ public class Resources {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	public ResourcesType getType() {
+	public ResourceType getType() {
 		return type;
 	}
-	public void setType(ResourcesType type) {
+	public void setType(ResourceType type) {
 		this.type = type;
 	}
 	

@@ -1,28 +1,40 @@
 package br.com.conquerors.entities;
 
 public class HeadQuarter extends Building{
-	private Double trainingCost;
-	private Integer trainingDuration;
-	private Integer trainingCapacity;
+	private int trainingCost;
+	private int trainingCapacity;
 	
-	public HeadQuarter() {}
-	public Double getTrainingCost() {
+	public HeadQuarter() {
+		this.trainingCost = 10;
+		this.trainingCapacity = 50;
+		this.setBuildPrice(75);
+	}
+
+	public int getTrainingCost() {
 		return trainingCost;
 	}
-	public void setTrainingCost(Double trainingCost) {
+
+	public void setTrainingCost(int trainingCost) {
 		this.trainingCost = trainingCost;
 	}
-	public Integer getTrainingDuration() {
-		return trainingDuration;
-	}
-	public void setTrainingDuration(Integer trainingDuration) {
-		this.trainingDuration = trainingDuration;
-	}
-	public Integer getTrainingCapacity() {
+
+	public int getTrainingCapacity() {
 		return trainingCapacity;
 	}
-	public void setTrainingCapacity(Integer trainingCapacity) {
+
+	public void setTrainingCapacity(int trainingCapacity) {
 		this.trainingCapacity = trainingCapacity;
 	}
+
+	@Override
+	public boolean increaseLevel() {
+		if (super.increaseLevel()) {
+			this.trainingCost += this.trainingCost * 0.05;
+			this.trainingCapacity += this.trainingCapacity * 0.10;
+		}
+		return false; 
+	}
+	
+	
 	
 }

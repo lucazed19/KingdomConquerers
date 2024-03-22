@@ -1,20 +1,28 @@
 package br.com.conquerors.entities;
 
 public class GoldMine extends Building{
-	private Double goldPerMin;
-
-	public Double getGoldPerMin() {
-		return goldPerMin;
-	}
-
-	public void setGoldPerMin(Double goldPerMin) {
-		this.goldPerMin = goldPerMin;
-	}
+	private int goldPerTurn;
 	
+	public GoldMine() {
+		this.goldPerTurn = 25;
+		this.setBuildPrice(150);
+	}
+
+	public int getGoldPerTurn() {
+		return goldPerTurn;
+	}
+
+	public void setGoldPerTurn(int goldPerTurn) {
+		this.goldPerTurn = goldPerTurn;
+	}
+
 	@Override
-	public void increaseLevel() {
-		super.increaseLevel();
-		this.goldPerMin += this.goldPerMin * 0.05;
+	public boolean increaseLevel() {
+		if (super.increaseLevel()) {
+			this.goldPerTurn += this.goldPerTurn * 0.05;
+			return true;
+		}
+		return false;
 	}
 	
 }
