@@ -24,7 +24,7 @@ public class ConquerorsOfTheKingdom {
 
             switch (escolha) {
                 case 1:
-                	gerenciarReino(scanner);
+                	gerenciarReino(scanner, kingdom);
                     break;
                 case 2:
                     System.out.println("Você escolheu Explorar.");
@@ -41,7 +41,7 @@ public class ConquerorsOfTheKingdom {
         scanner.close();
 	}
 	
-	public static void gerenciarReino(Scanner scanner) {
+	public static void gerenciarReino(Scanner scanner, Kingdom kingdom) {
         int escolha;
 
         do {
@@ -57,11 +57,10 @@ public class ConquerorsOfTheKingdom {
 
             switch (escolha) {
                 case 1:
-                    construir(scanner);
+                	construirUpgrade(scanner, kingdom, 1);
                     break;
                 case 2:
-                    System.out.println("Você escolheu Aumentar Nível das Construções.");
-                    // Coloque aqui o código para a opção Aumentar Nível das Construções
+                	construirUpgrade(scanner, kingdom, 2);
                     break;
                 case 3:
                     System.out.println("Você escolheu Treinar Soldados.");
@@ -76,54 +75,24 @@ public class ConquerorsOfTheKingdom {
         } while (escolha != 4);
     }
 	
-	public static void construir(Scanner scanner) {
+	public static void construirUpgrade(Scanner scanner, Kingdom kingdom, int type) {
         int escolha;
 
         do {
-            System.out.println("\nConstruir");
-            System.out.println("Escolha uma opção:");
-            System.out.println("1. Torre de Defesa");
-            System.out.println("2. Casa");
-            System.out.println("3. Quartel");
-            System.out.println("4. Mina de Ouro");
-            System.out.println("5. Mina de Ferro");
-            System.out.println("6. Acampamento Madeireiro");
+            System.out.println("\nEscolha uma opção:");
+            System.out.printf("1. Torre de Defesa (%d)\n", kingdom.getDefenseTowers().get(0).getBuildPrice());
+            System.out.printf("2. Mina de Ouro (%d)\n", kingdom.getGoldMines().get(0).getBuildPrice());
+            System.out.printf("3. Quartel (%d)\n", kingdom.getHeadQuarters().get(0).getBuildPrice());
+            System.out.printf("4. Casa (%d)\n", kingdom.getHouses().get(0).getBuildPrice());
+            System.out.printf("5. Mina de Ferro (%d)\n", kingdom.getIronMines().get(0).getBuildPrice());
+            System.out.printf("6. Acampamento Madeireiro (%d)\n", kingdom.getLumberCamps().get(0).getBuildPrice());
             System.out.println("7. Voltar ao Menu Gerenciar Reino");
 
             System.out.print("Opção: ");
             escolha = scanner.nextInt();
-
-            switch (escolha) {
-                case 1:
-                    System.out.println("Você escolheu Construir Torre de Defesa.");
-                    // Coloque aqui o código para a opção Construir Torre de Defesa
-                    break;
-                case 2:
-                    System.out.println("Você escolheu Construir Casa.");
-                    // Coloque aqui o código para a opção Construir Casa
-                    break;
-                case 3:
-                    System.out.println("Você escolheu Construir Quartel.");
-                    // Coloque aqui o código para a opção Construir Quartel
-                    break;
-                case 4:
-                    System.out.println("Você escolheu Construir Mina de Ouro.");
-                    // Coloque aqui o código para a opção Construir Mina de Ouro
-                    break;
-                case 5:
-                    System.out.println("Você escolheu Construir Mina de Ferro.");
-                    // Coloque aqui o código para a opção Construir Mina de Ferro
-                    break;
-                case 6:
-                    System.out.println("Você escolheu Construir Acampamento Madeireiro.");
-                    // Coloque aqui o código para a opção Construir Acampamento Madeireiro
-                    break;
-                case 7:
-                    System.out.println("Voltando ao Menu Gerenciar Reino...");
-                    break;
-                default:
-                    System.out.println("Opção inválida. Por favor, escolha novamente.");
-            }
+            
+            if (type == 1) KingdomUtil.build(kingdom, escolha);
+            else if (type == 2) KingdomUtil.upgrade(kingdom, escolha);
         } while (escolha != 7);
     }
 }

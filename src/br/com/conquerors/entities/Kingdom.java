@@ -35,53 +35,79 @@ public class Kingdom {
 		this.ironMines = ironMines;
 		this.lumberCamps = lumberCamps;
 	}
+	
 	public List<Resource> getResources() {
 		return resources;
 	}
 	public void setResources(List<Resource> resources) {
 		this.resources = resources;
 	}
+	
 	public List<Soldier> getSoldiers() {
 		return soldiers;
 	}
 	public void setSoldiers(List<Soldier> soldiers) {
 		this.soldiers = soldiers;
 	}
+	
 	public List<DefenseTower> getDefenseTowers() {
 		return defenseTowers;
 	}
 	public void setDefenseTowers(List<DefenseTower> defenseTowers) {
 		this.defenseTowers = defenseTowers;
 	}
+	public void addDefenseTower(DefenseTower tower) {
+		this.defenseTowers.add(tower);
+	}
+	
 	public List<GoldMine> getGoldMines() {
 		return goldMines;
 	}
 	public void setGoldMines(List<GoldMine> goldMines) {
 		this.goldMines = goldMines;
 	}
+	public void addGoldMine(GoldMine mine) {
+		this.goldMines.add(mine);
+	}
+	
 	public List<HeadQuarter> getHeadQuarters() {
 		return headQuarters;
 	}
 	public void setHeadQuarters(List<HeadQuarter> headQuarters) {
 		this.headQuarters = headQuarters;
 	}
+	public void addHeadQuarter(HeadQuarter headQuarter) {
+		this.headQuarters.add(headQuarter);
+	}
+	
 	public List<House> getHouses() {
 		return houses;
 	}
 	public void setHouses(List<House> houses) {
 		this.houses = houses;
 	}
+	public void addHouse(House house) {
+		this.houses.add(house);
+	}
+	
 	public List<IronMine> getIronMines() {
 		return ironMines;
 	}
 	public void setIronMines(List<IronMine> ironMines) {
 		this.ironMines = ironMines;
 	}
+	public void addIronMine(IronMine mine) {
+		this.ironMines.add(mine);
+	}
+	
 	public List<LumberCamps> getLumberCamps() {
 		return lumberCamps;
 	}
 	public void setLumberCamps(List<LumberCamps> lumberCamps) {
 		this.lumberCamps = lumberCamps;
+	}
+	public void addLumberCamp(LumberCamps camp) {
+		this.lumberCamps.add(camp);
 	}
 	
 	public int getHousesCapacity() {
