@@ -1,5 +1,7 @@
 package br.com.conquerors.entities;
 
+import br.com.conquerors.enuns.SoldierType;
+
 public class HeadQuarter extends Building{
 	private int trainingCost;
 	private int trainingCapacity;
@@ -34,7 +36,4 @@ public class HeadQuarter extends Building{
 		}
 		return false; 
 	}
-	
-	
-	
 }

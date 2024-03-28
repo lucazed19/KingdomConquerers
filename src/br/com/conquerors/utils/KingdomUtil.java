@@ -232,5 +232,28 @@ public class KingdomUtil {
 			kingdom.getSoldiers().add(soldier);
 		}
 	}
+	
+	public static void trainingSoldiers(Kingdom kingdom, SoldierType soldierType, int quantity) {
+		int gold = kingdom.getResources().get(0).getQuantity();
+		if (gold < kingdom.getHeadQuarters().get(0).getTrainingCapacity()) {
+			System.out.printf("Ouro insuficinte: %d\n", gold);
+			return;
+		}
+		if (quantity > (kingdom.getHousesCapacity() - kingdom.getSoldiersQuantity())) {
+			System.out.printf("Capacidade do reino insuficiente: %d\n", (kingdom.getHousesCapacity() - kingdom.getSoldiersQuantity()));
+			return;
+		}
+		if (quantity > kingdom.getHeadQuartersCapacity()) {			
+			System.out.printf("Capacidade dos quarteis insuficiente: %d\n", kingdom.getHeadQuartersCapacity());
+			return;
+		}
+		for (Soldier soldier : kingdom.getSoldiers()) {
+			if (soldier.getType().equals(soldierType)) {
+				soldier.increaseQuantity(quantity);
+				setGold(kingdom, gold - kingdom.getHeadQuarters().get(0).getTrainingCost());
+				System.out.println("Tropas treinadas");
+			}
+		}
+	}
 
 }

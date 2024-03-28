@@ -3,6 +3,7 @@ package br.com.conquerors;
 import java.util.Scanner;
 
 import br.com.conquerors.entities.Kingdom;
+import br.com.conquerors.enuns.SoldierType;
 import br.com.conquerors.utils.KingdomUtil;
 
 public class ConquerorsOfTheKingdom {
@@ -63,8 +64,7 @@ public class ConquerorsOfTheKingdom {
                 	construirUpgrade(scanner, kingdom, 2);
                     break;
                 case 3:
-                    System.out.println("Você escolheu Treinar Soldados.");
-                    // Coloque aqui o código para a opção Treinar Soldados
+                	treinarSoldados(scanner, kingdom);
                     break;
                 case 4:
                     System.out.println("Voltando ao Menu Principal...\n");
@@ -95,4 +95,29 @@ public class ConquerorsOfTheKingdom {
             else if (type == 2) KingdomUtil.upgrade(kingdom, escolha);
         } while (escolha != 7);
     }
+	
+	public static void treinarSoldados(Scanner scanner, Kingdom kingdom) {
+		int escolha;
+		
+		do {
+			System.out.println("\nEscolha uma opção:");
+			System.out.printf("1. %s (%d)\n",SoldierType.ARCHER.getDescricao(), kingdom.getHeadQuarters().get(0).getTrainingCost());
+			System.out.printf("2. %s (%d)\n",SoldierType.WARRIOR.getDescricao(), kingdom.getHeadQuarters().get(0).getTrainingCost());
+			System.out.printf("3. %s (%d)\n",SoldierType.SPEARMAN.getDescricao(), kingdom.getHeadQuarters().get(0).getTrainingCost());
+			System.out.println("4. Voltar ao Menu Gerenciar Reino");
+			
+			System.out.print("Opção: ");
+            escolha = scanner.nextInt();
+            
+            if (escolha != 4) {
+            	
+            	SoldierType soldierType = SoldierType.getSoldierTypeByNumber(escolha - 1);
+            	
+            	System.out.printf("\nEscolha a quantidade de %s para treinar - (CAPACIDADE: %d): ", soldierType.getDescricao(), kingdom.getHousesCapacity() - kingdom.getSoldiersQuantity());
+            	escolha = scanner.nextInt();
+            	
+            	KingdomUtil.trainingSoldiers(kingdom, soldierType, escolha);
+            }        
+		} while (escolha != 4);
+	}
 }

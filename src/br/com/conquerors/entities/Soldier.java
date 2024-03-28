@@ -60,6 +60,10 @@ public class Soldier {
 		public void setQuantity(int quantity) {
 			this.quantity = quantity;
 		}
+		
+		public void increaseQuantity(int quantity) {
+			this.quantity += quantity;
+		}
 
 		public void increaseLevel() {
 			if (this.level <= 5) {

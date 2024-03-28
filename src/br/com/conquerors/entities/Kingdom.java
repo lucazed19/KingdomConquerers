@@ -117,6 +117,13 @@ public class Kingdom {
 		return houses.get(0).getCapacity() * houses.size();
 	}
 	
+	public int getHeadQuartersCapacity() {
+		if (headQuarters.isEmpty()) {
+			return 0;
+		}
+		return headQuarters.get(0).getTrainingCapacity() * headQuarters.size();
+	}
+	
 	public int getSoldiersQuantity() {
 		int quantity = 0;
 		
@@ -136,6 +143,8 @@ public class Kingdom {
 		for (Soldier soldier : soldiers) {
 			System.out.printf("%s: %s  ", soldier.getType().getDescricao(), soldier.getQuantity());
 		}
+		System.out.printf("\nMina de ouro: %d  Mina de ferro: %d  Acampamento madeireiro: %d\n", this.goldMines.size(), this.ironMines.size(), this.lumberCamps.size());
+		System.out.printf("Torre de defesa: %d  Quartel: %d  Casa: %d\n", this.defenseTowers.size(), this.headQuarters.size(), this.houses.size());
 		System.out.println("\n-----------------------------------------");
 	}
 	
