@@ -37,14 +37,24 @@ public class KingdomUtil {
 		kingdom.getResources().get(0).setQuantity(amnt);
 	}
 	
+	public static void setResource(Kingdom kingdom, ResourceType resourceType, int quantity) {
+		for (Resource resource : kingdom.getResources()) {
+			if (resource.getType().equals(resourceType)) {
+				resource.setQuantity(quantity);
+			}
+		}
+	}
+	
 	public static void build(Kingdom kingdom, int type) {
 		int gold = kingdom.getResources().get(0).getQuantity();
+		int land = kingdom.getResources().get(3).getQuantity();
 		
 		switch (type) {
 			case 1:
 				if (gold >= kingdom.getDefenseTowers().get(0).getBuildPrice()) {
 					DefenseTower tower = new DefenseTower();
 					setGold(kingdom, gold - tower.getBuildPrice());
+					setResource(kingdom, ResourceType.LAND, land - 1);
 					
 					kingdom.addDefenseTower(tower);
 					System.out.println("Torre de defesa construída.");
@@ -56,6 +66,7 @@ public class KingdomUtil {
 				if (gold >= kingdom.getGoldMines().get(0).getBuildPrice()) {
 					GoldMine mine = new GoldMine();
 					setGold(kingdom, gold - mine.getBuildPrice());
+					setResource(kingdom, ResourceType.LAND, land - 1);
 					
 					kingdom.addGoldMine(mine);
 					System.out.println("Mina de ouro construída.");
@@ -67,6 +78,7 @@ public class KingdomUtil {
 				if (gold >= kingdom.getHeadQuarters().get(0).getBuildPrice()) {
 					HeadQuarter hq = new HeadQuarter();
 					setGold(kingdom, gold - hq.getBuildPrice());
+					setResource(kingdom, ResourceType.LAND, land - 1);
 					
 					kingdom.addHeadQuarter(hq);
 					System.out.println("Quartel construído.");
@@ -78,6 +90,7 @@ public class KingdomUtil {
 				if (gold >= kingdom.getHouses().get(0).getBuildPrice()) {
 					House house = new House();
 					setGold(kingdom, gold - house.getBuildPrice());
+					setResource(kingdom, ResourceType.LAND, land - 1);
 					
 					kingdom.addHouse(house);
 					System.out.println("Casa construída.");
@@ -89,6 +102,7 @@ public class KingdomUtil {
 				if (gold >= kingdom.getIronMines().get(0).getBuildPrice()) {
 					IronMine mine = new IronMine();
 					setGold(kingdom, gold - mine.getBuildPrice());
+					setResource(kingdom, ResourceType.LAND, land - 1);
 					
 					kingdom.addIronMine(mine);
 					System.out.println("Mina de ferro construída.");
@@ -100,6 +114,7 @@ public class KingdomUtil {
 				if (gold >= kingdom.getLumberCamps().get(0).getBuildPrice()) {
 					LumberCamps camp = new LumberCamps();
 					setGold(kingdom, gold - camp.getBuildPrice());
+					setResource(kingdom, ResourceType.LAND, land - 1);
 					
 					kingdom.addLumberCamp(camp);
 					System.out.println("Acampamento construído.");
@@ -253,6 +268,24 @@ public class KingdomUtil {
 				setGold(kingdom, gold - kingdom.getHeadQuarters().get(0).getTrainingCost());
 				System.out.println("Tropas treinadas");
 			}
+		}
+	}
+	
+	public static void updateKingdomResourcesPerTurn(Kingdom kingdom) {
+		if (!kingdom.getGoldMines().isEmpty()) {
+			int gold = kingdom.getResources().get(0).getQuantity();
+			int goldPerTurn = kingdom.getGoldMines().get(0).getGoldPerTurn() * kingdom.getGoldMines().size();
+			setResource(kingdom, ResourceType.GOLD, gold + goldPerTurn);
+		}
+		if (!kingdom.getIronMines().isEmpty()) {
+			int iron = kingdom.getResources().get(2).getQuantity();
+			int ironPerTurn = kingdom.getIronMines().get(0).getIronPerTurn() * kingdom.getIronMines().size();
+			setResource(kingdom, ResourceType.IRON, iron + ironPerTurn);
+		}
+		if (!kingdom.getLumberCamps().isEmpty()) {
+			int wood = kingdom.getResources().get(1).getQuantity();
+			int woodPerTurn = kingdom.getLumberCamps().get(0).getWoodPerTurn() * kingdom.getLumberCamps().size();
+			setResource(kingdom, ResourceType.WOOD, wood + woodPerTurn);
 		}
 	}
 

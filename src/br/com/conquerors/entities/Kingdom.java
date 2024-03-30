@@ -3,6 +3,8 @@ package br.com.conquerors.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.conquerors.enuns.ResourceType;
+
 public class Kingdom {
 	private List<Resource> resources;
 	private List<Soldier> soldiers;
@@ -132,6 +134,15 @@ public class Kingdom {
 		}
 		
 		return quantity;
+	}
+	
+	public int getResourcesQuantityByType(ResourceType resourceType) {
+		for (Resource resource : this.getResources()) {
+			if (resource.getType().equals(resourceType)) {
+				return resource.getQuantity();
+			}
+		}
+		return 0;
 	}
 	
 	public void printStatus() {

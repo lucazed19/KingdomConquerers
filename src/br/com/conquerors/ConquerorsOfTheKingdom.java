@@ -1,10 +1,20 @@
 package br.com.conquerors;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 import br.com.conquerors.entities.Kingdom;
 import br.com.conquerors.enuns.SoldierType;
+import br.com.conquerors.interfaces.Function;
 import br.com.conquerors.utils.KingdomUtil;
+import br.com.conquerors.utils.Option;
+import br.com.conquerors.utils.OptionUtil;
 
 public class ConquerorsOfTheKingdom {
 	public static void main(String[] args) {
@@ -28,14 +38,22 @@ public class ConquerorsOfTheKingdom {
                 	gerenciarReino(scanner, kingdom);
                     break;
                 case 2:
-                    System.out.println("Você escolheu Explorar.");
-                    // Coloque aqui o código para a opção Explorar
+                    explorar(scanner, kingdom);
                     break;
                 case 3:
                     System.out.println("Saindo do jogo...");
                     break;
                 default:
                     System.out.println("Opção inválida. Por favor, escolha novamente.");
+            }
+            KingdomUtil.updateKingdomResourcesPerTurn(kingdom);
+            try {
+	            if (System.getProperty("os.name").contains("Windows")) {
+	            	Runtime.getRuntime().exec("cls");
+	            } else {
+	                Runtime.getRuntime().exec("clear");
+	            }
+            } catch (Exception e) {
             }
         } while (escolha != 3);
 
@@ -77,23 +95,34 @@ public class ConquerorsOfTheKingdom {
 	
 	public static void construirUpgrade(Scanner scanner, Kingdom kingdom, int type) {
         int escolha;
-
-        do {
-            System.out.println("\nEscolha uma opção:");
-            System.out.printf("1. Torre de Defesa (%d)\n", kingdom.getDefenseTowers().get(0).getBuildPrice());
-            System.out.printf("2. Mina de Ouro (%d)\n", kingdom.getGoldMines().get(0).getBuildPrice());
-            System.out.printf("3. Quartel (%d)\n", kingdom.getHeadQuarters().get(0).getBuildPrice());
-            System.out.printf("4. Casa (%d)\n", kingdom.getHouses().get(0).getBuildPrice());
-            System.out.printf("5. Mina de Ferro (%d)\n", kingdom.getIronMines().get(0).getBuildPrice());
-            System.out.printf("6. Acampamento Madeireiro (%d)\n", kingdom.getLumberCamps().get(0).getBuildPrice());
-            System.out.println("7. Voltar ao Menu Gerenciar Reino");
-
-            System.out.print("Opção: ");
-            escolha = scanner.nextInt();
-            
-            if (type == 1) KingdomUtil.build(kingdom, escolha);
-            else if (type == 2) KingdomUtil.upgrade(kingdom, escolha);
-        } while (escolha != 7);
+        
+        if (kingdom.getResources().get(3).getQuantity() <= 0 && type == 1) {
+        	System.out.println("Você não possui terras para construir.");
+        } else {        	
+        	do {
+        		System.out.println("\nEscolha uma opção:");
+        		System.out.printf("1. Torre de Defesa (%d)\n", kingdom.getDefenseTowers().get(0).getBuildPrice());
+        		System.out.printf("2. Mina de Ouro (%d)\n", kingdom.getGoldMines().get(0).getBuildPrice());
+        		System.out.printf("3. Quartel (%d)\n", kingdom.getHeadQuarters().get(0).getBuildPrice());
+        		System.out.printf("4. Casa (%d)\n", kingdom.getHouses().get(0).getBuildPrice());
+        		System.out.printf("5. Mina de Ferro (%d)\n", kingdom.getIronMines().get(0).getBuildPrice());
+        		System.out.printf("6. Acampamento Madeireiro (%d)\n", kingdom.getLumberCamps().get(0).getBuildPrice());
+        		System.out.println("7. Voltar ao Menu Gerenciar Reino");
+        		
+        		System.out.print("Opção: ");
+        		escolha = scanner.nextInt();
+        		
+        		if (escolha >= 1 && escolha <= 6) {
+        			if (type == 1) KingdomUtil.build(kingdom, escolha);
+        			else if (type == 2) KingdomUtil.upgrade(kingdom, escolha);            	
+        		} else if (escolha == 7) {
+        			System.out.println("Voltando ao Menu Gerenciar Reino...\n");            	
+        		} else {
+        			System.out.println("Opção inválida. Por favor, escolha novamente.");            	
+        		}
+        		
+        	} while (escolha != 7);
+        }
     }
 	
 	public static void treinarSoldados(Scanner scanner, Kingdom kingdom) {
@@ -109,15 +138,43 @@ public class ConquerorsOfTheKingdom {
 			System.out.print("Opção: ");
             escolha = scanner.nextInt();
             
-            if (escolha != 4) {
-            	
+            if (escolha >= 1 && escolha <= 3) {            	
             	SoldierType soldierType = SoldierType.getSoldierTypeByNumber(escolha - 1);
             	
             	System.out.printf("\nEscolha a quantidade de %s para treinar - (CAPACIDADE: %d): ", soldierType.getDescricao(), kingdom.getHousesCapacity() - kingdom.getSoldiersQuantity());
             	escolha = scanner.nextInt();
             	
             	KingdomUtil.trainingSoldiers(kingdom, soldierType, escolha);
-            }        
+            } else if (escolha == 4) {
+            	System.out.println("Voltando ao Menu Gerenciar Reino...\n"); 
+            } else {            	
+            	System.out.println("Opção inválida. Por favor, escolha novamente.");            	
+            }
 		} while (escolha != 4);
+	}
+	
+	public static void explorar(Scanner scanner, Kingdom kingdom) {
+		int escolha;
+		int voltar = 0;
+		Random random = new Random();
+		
+		Option[] options = OptionUtil.createExplorarOption();
+		
+		do {
+			Option option = options[random.nextInt(options.length)];
+			voltar = option.getChoices().size();
+			
+			System.out.println(option.getDescription());
+			List<Function> listFunctions = new ArrayList<Function>();
+			
+			for (Map.Entry<String, Function> entry : option.getChoices().entrySet()) {
+	            listFunctions.add(entry.getValue());
+	            System.out.println(entry.getKey());
+	        }
+			escolha = scanner.nextInt();
+			Function function = listFunctions.get(escolha - 1);
+			function.executar(kingdom);
+			
+		} while (escolha != voltar);
 	}
 }
