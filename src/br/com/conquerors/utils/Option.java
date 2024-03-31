@@ -1,13 +1,8 @@
 package br.com.conquerors.utils;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import br.com.conquerors.interfaces.Function;
-
 public class Option {
 	private String description;
-	private Map<String, Function> choices;
+	private Choice[] choices;
 	
 	public String getDescription() {
 		return description;
@@ -15,10 +10,10 @@ public class Option {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Map<String, Function> getChoices() {
+	public Choice[] getChoices() {
 		return choices;
 	}
-	public void setChoices(Map<String, Function> choices) {
+	public void setChoices(Choice[] choices) {
 		this.choices = choices;
 	}
 }

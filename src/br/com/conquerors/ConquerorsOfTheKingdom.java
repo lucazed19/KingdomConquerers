@@ -1,17 +1,14 @@
 package br.com.conquerors;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Set;
 
 import br.com.conquerors.entities.Kingdom;
 import br.com.conquerors.enuns.SoldierType;
 import br.com.conquerors.interfaces.Function;
+import br.com.conquerors.utils.Choice;
 import br.com.conquerors.utils.KingdomUtil;
 import br.com.conquerors.utils.Option;
 import br.com.conquerors.utils.OptionUtil;
@@ -46,7 +43,9 @@ public class ConquerorsOfTheKingdom {
                 default:
                     System.out.println("Opção inválida. Por favor, escolha novamente.");
             }
+            
             KingdomUtil.updateKingdomResourcesPerTurn(kingdom);
+            
             try {
 	            if (System.getProperty("os.name").contains("Windows")) {
 	            	Runtime.getRuntime().exec("cls");
@@ -162,15 +161,16 @@ public class ConquerorsOfTheKingdom {
 		
 		do {
 			Option option = options[random.nextInt(options.length)];
-			voltar = option.getChoices().size();
+			voltar = option.getChoices().length;
 			
 			System.out.println(option.getDescription());
 			List<Function> listFunctions = new ArrayList<Function>();
 			
-			for (Map.Entry<String, Function> entry : option.getChoices().entrySet()) {
-	            listFunctions.add(entry.getValue());
-	            System.out.println(entry.getKey());
+			for (Choice choice : option.getChoices()) {
+	            listFunctions.add(choice.getFunction());
+	            System.out.println(choice.getDescription());
 	        }
+			
 			escolha = scanner.nextInt();
 			Function function = listFunctions.get(escolha - 1);
 			function.executar(kingdom);
