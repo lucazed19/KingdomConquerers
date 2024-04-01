@@ -14,6 +14,7 @@ public class Kingdom {
 	private List<House> houses;
 	private List<IronMine> ironMines;
 	private List<LumberCamps> lumberCamps;
+	private List<Kingdom> allies;
 	
 	public Kingdom() {
 		this.resources = new ArrayList<>();
@@ -24,6 +25,7 @@ public class Kingdom {
 		this.houses = new ArrayList<>();
 		this.ironMines = new ArrayList<>();
 		this.lumberCamps = new ArrayList<>();
+		this.allies = new ArrayList<>();
 	}
 	public Kingdom(List<Resource> resources, List<Soldier> soldiers, List<DefenseTower> defenseTowers,
 			List<GoldMine> goldMines, List<HeadQuarter> headQuarters, List<House> houses, List<IronMine> ironMines,
@@ -111,7 +113,12 @@ public class Kingdom {
 	public void addLumberCamp(LumberCamps camp) {
 		this.lumberCamps.add(camp);
 	}
-	
+	public List<Kingdom> getAllies() {
+		return allies;
+	}
+	public void setAllies(List<Kingdom> allies) {
+		this.allies = allies;
+	}
 	public int getHousesCapacity() {
 		if (houses.isEmpty()) {
 			return 0;
@@ -146,7 +153,7 @@ public class Kingdom {
 	}
 	
 	public void printStatus() {
-		System.out.println("---------- Status do seu reino ----------");
+		System.out.println("-------------- Status do seu reino --------------");
 		for (Resource resource : resources) {
 			System.out.printf("%s: %s  ", resource.getType().getDescricao(), resource.getQuantity());
 		}
@@ -156,7 +163,7 @@ public class Kingdom {
 		}
 		System.out.printf("\nMina de ouro: %d  Mina de ferro: %d  Acampamento madeireiro: %d\n", this.goldMines.size(), this.ironMines.size(), this.lumberCamps.size());
 		System.out.printf("Torre de defesa: %d  Quartel: %d  Casa: %d\n", this.defenseTowers.size(), this.headQuarters.size(), this.houses.size());
-		System.out.println("\n-----------------------------------------");
+		System.out.println("\n-------------------------------------------------");
 	}
 	
 }

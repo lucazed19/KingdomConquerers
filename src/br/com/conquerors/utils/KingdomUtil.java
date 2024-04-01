@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Scanner;
 
 import br.com.conquerors.entities.DefenseTower;
 import br.com.conquerors.entities.GoldMine;
@@ -30,6 +29,16 @@ public class KingdomUtil {
 		kingdom.setIronMines(new ArrayList<IronMine>(Collections.nCopies(2, new IronMine())));
 		kingdom.setLumberCamps(new ArrayList<LumberCamps>(Collections.nCopies(2, new LumberCamps())));
 		kingdom.setHeadQuarters(new ArrayList<HeadQuarter>(Collections.nCopies(2, new HeadQuarter())));
+		getRandomSoldiers(kingdom);
+		
+		return kingdom;
+	}
+	
+	public static Kingdom createRandomKingdomMin() {
+		Kingdom kingdom = new Kingdom();
+		
+		kingdom.setResources(getRandomResources());
+		kingdom.setHouses(new ArrayList<House>(Collections.nCopies(5, new House())));
 		getRandomSoldiers(kingdom);
 		
 		return kingdom;
@@ -245,6 +254,13 @@ public class KingdomUtil {
 		for (int i = 0; i < 3; i++) {
 			Soldier soldier = new Soldier();
 			soldier.setType(SoldierType.getSoldierTypeByNumber(i));
+			if (soldier.getType().equals(SoldierType.ARCHER)) {
+				soldier.setHealth(5);
+				soldier.setStrength(15);
+			} else {
+				soldier.setHealth(10);
+				soldier.setStrength(10);
+			}
 			soldier.setQuantity(random.nextInt(kingdom.getHousesCapacity() - kingdom.getSoldiersQuantity()));
 			kingdom.getSoldiers().add(soldier);
 		}
@@ -268,7 +284,7 @@ public class KingdomUtil {
 			if (soldier.getType().equals(soldierType)) {
 				soldier.increaseQuantity(quantity);
 				setGold(kingdom, gold - kingdom.getHeadQuarters().get(0).getTrainingCost());
-				System.out.println("Tropas treinadas");
+				System.out.println("Tropas treinadas!");
 			}
 		}
 	}
@@ -288,6 +304,106 @@ public class KingdomUtil {
 			int wood = kingdom.getResources().get(1).getQuantity();
 			int woodPerTurn = kingdom.getLumberCamps().get(0).getWoodPerTurn() * kingdom.getLumberCamps().size();
 			setResource(kingdom, ResourceType.WOOD, wood + woodPerTurn);
+		}
+	}
+	
+	public static int getDefenseTowersAttack(List<DefenseTower> defenseTowers) {
+		int attack = 0;
+		
+		for (DefenseTower defenseTower : defenseTowers) {
+			attack += defenseTower.getAttackDamage();
+		}
+		
+		return attack;
+	}
+	
+	public static int getDefenseTowersHealth(List<DefenseTower> defenseTowers) {
+		int health = 0;
+		
+		for (DefenseTower defenseTower : defenseTowers) {
+			health += defenseTower.getHealth();
+		}
+		
+		return health;
+	}
+	
+	public static int getSoldiersStrength(List<Soldier> soldiers) {
+		int strength = 0;
+		
+		for (Soldier soldier : soldiers) {
+			strength += soldier.getStrength() * soldier.getQuantity();
+		}
+		
+		return strength;
+	}
+	
+	public static int getSoldiersHealth(List<Soldier> soldiers) {
+		int health = 0;
+		
+		for (Soldier soldier : soldiers) {
+			health += soldier.getHealth() * soldier.getQuantity();
+		}
+		
+		return health;
+	}
+	
+	public static void battle(Kingdom kingdom, Kingdom enemyKingdom) {
+		Scanner scan = new Scanner(System.in);
+		Random random = new Random();
+		
+		System.out.printf("Força Inimiga: %d  |  Vida Inimiga: %d\n", getSoldiersStrength(enemyKingdom.getSoldiers()), getSoldiersHealth(enemyKingdom.getSoldiers()));
+		List<Soldier> soldiers = List.of(new Soldier(5, 15, 0, SoldierType.ARCHER), new Soldier(10, 10, 0, SoldierType.WARRIOR), new Soldier(10, 10, 0, SoldierType.SPEARMAN));
+		if (!kingdom.getAllies().isEmpty()) {
+			for (Kingdom ally : kingdom.getAllies()) {
+				for (Soldier soldier : ally.getSoldiers()) {
+					int quantity = random.nextInt(soldier.getQuantity());
+					soldier.setQuantity(soldier.getQuantity() - quantity);
+					soldiers.get(soldier.getType().getNumber()).increaseQuantity(quantity);
+				}
+			}
+			System.out.println("Seus aliados enviaram tropas para ajudar na batalha!");
+			System.out.printf("Força das tropas aliadas: %d  |  Vida das tropas aliadas: %d\n", getSoldiersStrength(soldiers), getSoldiersHealth(soldiers));
+		}
+		
+		for (Soldier soldier : kingdom.getSoldiers()) {
+			System.out.printf("Insira quantos %s deseja enviar para a batalha:.\n(FORÇA UNITÁRIA= %d) (MÁXIMO = %d)\n", soldier.getType().getDescricao(), soldier.getStrength(),soldier.getQuantity());
+			int quantity = scan.nextInt();
+			
+			if (quantity > soldier.getQuantity()) {
+				quantity = soldier.getQuantity();
+				System.out.printf("Quantidade maior que a máxima. Enviando todos os %s!\n", soldier.getType().getDescricao());
+			}
+			
+			soldier.setQuantity(soldier.getQuantity() - quantity);
+			soldiers.get(soldier.getType().getNumber()).increaseQuantity(quantity);
+		}
+		System.out.printf("Força total: %d  |  Vida total: %d\n", getSoldiersStrength(soldiers), getSoldiersHealth(soldiers));
+		
+		int newEnemyHealth = getSoldiersHealth(enemyKingdom.getSoldiers()) - getSoldiersStrength(soldiers);
+		int newHealth = getSoldiersHealth(soldiers) - getSoldiersStrength(enemyKingdom.getSoldiers());
+		
+		if (newHealth > newEnemyHealth) {
+			System.out.println("Parabéns você venceu a batalha! Os recursos inimigos agora são seus!");
+			System.out.println("Recursos adquiridos:");
+			for (Resource resource : enemyKingdom.getResources()) {
+				System.out.printf("%s: %d\n", resource.getType().getDescricao(), resource.getQuantity());
+				kingdom.getResources().get(resource.getType().getNumber()).increaseQuantity(resource.getQuantity());
+			}
+		} else {
+			System.out.println("Você perdeu a batalha! O reino inimigo saqueou seus recursos!");
+			System.out.println("Recursos saqueados:");
+			int resourcesQuantity = 0;
+			for (Resource resource : kingdom.getResources()) {
+				int quantity = random.nextInt(resource.getQuantity());
+				System.out.printf("%s: %d\n", resource.getType().getDescricao(), quantity);
+				kingdom.getResources().get(resource.getType().getNumber()).decreaseQuantity(quantity);
+				resourcesQuantity += kingdom.getResources().get(resource.getType().getNumber()).getQuantity();
+			}
+			
+			if (resourcesQuantity == 0) {
+				System.out.println("FIM DE JOGO!! \nVocê perdeu todos os seus recursos!");
+				System.exit(1);
+			}
 		}
 	}
 

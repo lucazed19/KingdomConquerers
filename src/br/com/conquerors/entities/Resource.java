@@ -18,6 +18,12 @@ public class Resource {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+	public void increaseQuantity(int quantity) {
+		this.quantity += quantity;
+	}
+	public void decreaseQuantity(int quantity) {
+		this.quantity -= quantity;
+	}
 	public ResourceType getType() {
 		return type;
 	}

@@ -19,13 +19,16 @@ public class ConquerorsOfTheKingdom {
 		
 		Scanner scanner = new Scanner(System.in);
         int escolha;
+        int turno = 1;
 
         do {
+        	System.out.printf("Turno: %d\n", turno);
         	kingdom.printStatus();
             System.out.println("Escolha uma opção:");
             System.out.println("1. Gerenciar Reino");
             System.out.println("2. Explorar");
-            System.out.println("3. Sair do Jogo");
+            System.out.println("3. Instruções");
+            System.out.println("4. Sair do Jogo");
 
             System.out.print("Opção: ");
             escolha = scanner.nextInt();
@@ -36,15 +39,18 @@ public class ConquerorsOfTheKingdom {
                     break;
                 case 2:
                     explorar(scanner, kingdom);
+                    KingdomUtil.updateKingdomResourcesPerTurn(kingdom);
+                    turno++;
                     break;
                 case 3:
+                	printInstruction();
+                    break;
+                case 4:
                     System.out.println("Saindo do jogo...");
                     break;
                 default:
                     System.out.println("Opção inválida. Por favor, escolha novamente.");
             }
-            
-            KingdomUtil.updateKingdomResourcesPerTurn(kingdom);
             
             try {
 	            if (System.getProperty("os.name").contains("Windows")) {
@@ -52,8 +58,7 @@ public class ConquerorsOfTheKingdom {
 	            } else {
 	                Runtime.getRuntime().exec("clear");
 	            }
-            } catch (Exception e) {
-            }
+            } catch (Exception e) {}
         } while (escolha != 3);
 
         scanner.close();
@@ -163,7 +168,7 @@ public class ConquerorsOfTheKingdom {
 			Option option = options[random.nextInt(options.length)];
 			voltar = option.getChoices().length;
 			
-			System.out.println(option.getDescription());
+			System.out.println("\n"+option.getDescription());
 			List<Function> listFunctions = new ArrayList<Function>();
 			
 			for (Choice choice : option.getChoices()) {
@@ -171,10 +176,18 @@ public class ConquerorsOfTheKingdom {
 	            System.out.println(choice.getDescription());
 	        }
 			
-			escolha = scanner.nextInt();
-			Function function = listFunctions.get(escolha - 1);
+			if (option.getChoices().length == 1) {
+				escolha = 0;
+			} else {
+				escolha = scanner.nextInt() - 1;				
+			}
+			Function function = listFunctions.get(escolha);
 			function.executar(kingdom);
 			
-		} while (escolha != voltar);
+		} while (escolha + 1 != voltar);
+	}
+	
+	public static void printInstruction() {
+		
 	}
 }

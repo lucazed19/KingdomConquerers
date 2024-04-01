@@ -1,36 +1,36 @@
 package br.com.conquerors.entities;
 
 public class DefenseTower extends Building{
-	private int archerNum;
-	private double atackDamage;
+	private int attackDamage;
+	private int health;
 	
 	public DefenseTower() {
-		this.archerNum = 10;
-		this.atackDamage = 50;
+		this.attackDamage = 350;
+		this.health = 350;
 		this.setBuildPrice(75);
 	}
-	
-	public int getArcherNum() {
-		return archerNum;
+
+	public int getAttackDamage() {
+		return attackDamage;
 	}
 
-	public void setArcherNum(int archerNum) {
-		this.archerNum = archerNum;
+	public void setAttackDamage(int atackDamage) {
+		this.attackDamage = atackDamage;
 	}
 
-	public double getAtackDamage() {
-		return atackDamage;
+	public int getHealth() {
+		return health;
 	}
 
-	public void setAtackDamage(double atackDamage) {
-		this.atackDamage = atackDamage;
+	public void setHealth(int health) {
+		this.health = health;
 	}
 
 	@Override
 	public boolean increaseLevel() {
 		if (super.increaseLevel()) {
-			this.atackDamage += this.atackDamage * 0.05;
-			this.archerNum += 5;			
+			this.attackDamage += this.attackDamage * 0.05;	
+			this.health += this.health * 0.05;
 			return true;
 		}
 		return false;
